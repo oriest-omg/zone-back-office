@@ -69,29 +69,15 @@
                   </thead>
                   <tbody>
                   <tr v-for ="(product,index) in products" :key="index">
-                    <template v-for="(productType,index) in product.product_types" :key="index">
+                    <!-- <template v-for="(productType,index) in product.product_types" :key="index"> -->
                     <td> 
-                      <img v-if="productType.images != ''" :src="'http://localhost:3000/image/src/'+productType.images[0]._id" width="100" height="100" alt="">
-                      <img v-if="product.photo == ''" src="../../dist/img/avatar.png" width="100" height="100" alt="">
+                      <img v-if="product.product_types[0].images != ''" :src="'http://localhost:3000/image/src/'+product.product_types[0].images[0]._id" width="100" height="100" alt="">
                     </td>
                       <td>{{ product.title }}</td>
                     <td>{{ product.category}}</td>
                     <td>{{ formatDate(product.created) }}</td>
-
-                    </template>
-                    <!-- <td>{{ voiture.matricule}}</td> -->
-                    <!-- <td>
-                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bmodal-default" @click="Afficher(etudiant.id)"> 
-                      <img :src="'http://localhost:8000'+etudiant.cni" width="100" height="100" alt="">
-                      </button>   
-                    </td>
                     <td>
-                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#amodal-default" @click="Afficher(etudiant.id)"> 
-                       <img :src="'http://localhost:8000'+etudiant.bacBenef" width="100" height="100" alt="">
-                      </button>   
-                    </td> -->
-                    <td>
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" @click="Modifier(etudiant.id)">
+                      <button type="button" class="btn btn-default" data-toggle="modal" :data-target="'#modal-edit'+product._id">
                         Details
                       </button>
                       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" @click="Modifier(etudiant.id)">
@@ -104,6 +90,8 @@
                       <!-- /.control-sidebar -->
                     <DeleteProduct
                     :idProduct="idProduct"/>
+                    <ReadProduct
+                    :product="product"/>
                   </tr>
                   </tbody>
                   <tfoot>
@@ -131,7 +119,7 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2021-2022 <a href="https://adminlte.io">Djelloh Foundation</a>.</strong>
+    <strong>Copyright &copy; 2021-2022 <a href="#">Djelloh Foundation</a>.</strong>
     Tous les droits sont réservés.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0-rc
@@ -142,17 +130,14 @@
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
   </aside>
-        <AjouterProduct
-        :modeles="modeles"/>
-        <ModifierEtudiants
+        <AjouterProduct/>
+        <!-- <ModifierEtudiants
         :idd="idEtudiant"
-        :etudiant="etudiant"/>
-        <AfficherBac
-        :idd="idEtudiant"
-        :etudiant="etudiant"/>
+        :etudiant="etudiant"/> -->
+<!-- 
         <AfficherCni
         :idd="idEtudiant"
-        :etudiant="etudiant"/>
+        :etudiant="etudiant"/> -->
 
 </div>
 <!-- ./wrapper -->
@@ -165,11 +150,11 @@
 import axios from 'axios';
 import moment from 'moment'
 import ModifierEtudiants from '../components/Modals/ModifierEtudiants.vue';
-import AfficherBac from '../components/Modals/AfficherBac.vue';
 import AfficherCni from '../components/Modals/AfficherCni.vue';
 import AjouterProduct from '../components/Modals/products/AddProduct.vue';
 import DeleteProduct from '../components/Modals/products/DeleteProduct.vue'
 import Menu from '../components/menu.vue';
+import ReadProduct from '../components/Modals/products/ReadProduct.vue';
 
 export default {
     name : 'ListeVoitures',
@@ -179,7 +164,7 @@ export default {
                 modeles : [],
                 idProduct : '',
                 idEtudiant:'',
-                etudiant:{},
+                product:{},
                 nbEtudiantEnCours:0
         }
     },
@@ -195,23 +180,13 @@ export default {
                 console.log(this.products);
               });
             },
-            Modifier(val){
-                // this.maj =true;
-                this.idEtudiant = val;
-                // console.log(val);
-                axios
-                .get('http://localhost:8000/api/etudiants/'+val)
-                .then(response =>{
-                    this.etudiant  = response.data;
-                });
-            },
             Delete(val){
                 this.idProduct = val;
             },
             Afficher(val){
                 // this.maj =true;
                 this.idEtudiant = val;
-                // console.log(val);
+                console.log(val);
                 axios
                 .get('http://localhost:8000/api/etudiants/'+val)
                 .then(response =>{
@@ -251,16 +226,16 @@ export default {
 
     async mounted() {
         await this.getDatas();
-        await this.getModels();
+        // await this.getModels();
         console.log('ok')
     },
   components :{
     ModifierEtudiants,
-    AfficherBac,
     AfficherCni,
     AjouterProduct,
     DeleteProduct,
-    Menu
+    Menu,
+    ReadProduct
 }
 }
 </script>

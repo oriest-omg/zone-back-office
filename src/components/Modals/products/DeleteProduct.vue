@@ -35,7 +35,7 @@ export default {
     methods : {
             DeleteProduct(){
                 const options = {
-                    url: 'http://localhost:3000/product/'+this.idProduct,
+                    url: 'http://localhost:3000/product',
                     method: 'DELETE',
                     data :{
                         id : this.idProduct

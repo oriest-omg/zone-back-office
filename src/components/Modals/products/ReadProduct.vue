@@ -1,9 +1,10 @@
 <template>
-      <div class="modal fade" id="modal-ajouter">
+      <div class="modal fade" v-bind:id="'modal-edit'+product._id">
         <div class="modal-dialog">
           <div class="modal-content" style="width : 150%">
             <div class="modal-header">
               <h4 class="modal-title">Ajouter Produit</h4>
+              <button @click="changeEdit()" :class="[edit==false ?'btn btn-primary' :'btn btn-danger']"> {{edit==false ? 'Activer la modification' : 'Annuler la modification' }} </button>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -12,10 +13,10 @@
                 <table width="100%">
                     <tr>
                         <td rowspan="3" style="width:40%;">
-                            <div class="form-group" v-if="image == ''">
+                            <!-- <div class="form-group" v-if="image == ''">
                                 <input type="file" v-on:change="getImage(item,$event)" multiple>
-                            </div>
-                                <img v-if="image != ''" :src="item.img" alt="">
+                            </div> -->
+                                <img :src="'http://localhost:3000/image/src/'+product.product_types[0].images[0]._id" alt="">
                                 <button v-if="image != ''" class="btn btn-danger" @click="removeImage(item)">Retirer l'image</button>
                         </td>
                     </tr>
@@ -23,7 +24,7 @@
                         <td>
                             <div class="form-group">
                                 <label class="col-form-label mt-1"  for="titre">Titre</label>
-                                <input type="text" class="form-control" v-model="title" placeholder="Titre" id="titre">
+                                <input type="text" class="form-control" v-model="product.title" placeholder="Titre" id="titre" :disabled="edit == false">
                             </div>
                         </td>
                     </tr>
@@ -31,7 +32,7 @@
                         <td>
                             <div class="form-group">
                                 <label class="col-form-label mt-1"  for="category">Categorie</label>
-                                <input type="text" class="form-control" v-model="category" placeholder="Categorie" id="categorie">
+                                <input type="text" class="form-control" v-model="product.category" placeholder="Categorie" id="categorie" :disabled="edit == false">
                             </div>
                         </td>
                     </tr>
@@ -47,6 +48,7 @@
                     <tbody>
                         <myItem v-for="(productType, index) in productTypes"
                             :key="index"
+                            :edit="edit"
                             :productType="productType"
                             :productTypes="productTypes"                     
                             v-on:remove="removeRow(index)"/>
@@ -55,12 +57,12 @@
                     </tbody>
                 </table>
                 <div>
-                    <button class="btn btn-primary" @click="addRow"> Ajouter</button>
+                    <button class="btn btn-primary" @click="addRow" v-if="edit == true"> Ajouter</button>
                 </div>
         </div>
         <div class="modal-footer">
             <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button> -->
-            <button type="button" class="btn btn-success" @click="AjouterProduct()" >Enregistrer</button>
+            <button type="button" class="btn btn-success" @click="updateProduct()" v-if="edit == true">Modifier</button>
         </div>
           </div>
           <!-- /.modal-content -->
@@ -78,43 +80,23 @@ export default {
     data(){
         return{
             item  : {img:false},
-            productTypes : [
-                {
-                    available : true,
-                    stock : '',
-                    price :{
-                        original :0,
-                        discount : 0,
-                        bulk_discount : 0,
-                        discount_quantity : 0,
-                        currency : 0
-                    },
-                    description : '',
-                    images :'',
-                    dimensions :{
-                        width :'',
-                        height :'',
-                        length :'',
-                        unit :''
-                    }
-                }
-            ],
-            title:'',
-            category:'',
+            productTypes : this.product.product_types,
             channels : [],
-            image : ''
+            image : '',
+            edit : false
         }
     },
     // emits:['on-reload'],
     methods : {
-            async AjouterProduct(){
-                await this.submitFile();
+            async updateProduct(){
+                // await this.submitFile();
                 const options = {
                     url: 'http://localhost:3000/product',
-                    method: 'POST',
+                    method: 'PUT',
                     data: {
-                            title:this.title,
-                            category:this.category,
+                            id : this.product._id,
+                            title:this.product.title,
+                            category:this.product.category,
                             channels : [],
                             productTypes : this.productTypes,
                     },
@@ -125,13 +107,15 @@ export default {
                 };
                 axios(options)
                 .then( response =>{
+                    console.log(response);
                     if(response != null){
                         this.$notify({
-                            title: "Ajouter",
-                            text: "Article ajouté Ajouter",
+                            title: "Modification",
+                            text: "Modification effectuée",
                             type : "success"
                         })
                     }
+                    this.edit = false;
                     this.$emit("on-reload",true)
                 })
                 .catch(error =>{
@@ -194,8 +178,12 @@ export default {
             },
             removeRow(index){
                 this.productTypes.splice(index,1); // why is this removing only the last row?
+            },
+            changeEdit(){
+                this.edit = !this.edit;
             }
         },
+        props : ['product']
 }
 </script>
 
