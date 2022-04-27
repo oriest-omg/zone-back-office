@@ -171,9 +171,6 @@
 
 <script>
 import axios from 'axios';
-import ModifierEtudiants from '../components/Modals/ModifierEtudiants.vue';
-import AfficherBac from '../components/Modals/AfficherBac.vue';
-import AfficherCni from '../components/Modals/AfficherCni.vue';
 import DetailCommande from '../components/Modals/Commandes/detailCommande.vue';
 import Menu from '../components/menu.vue';
 
@@ -247,9 +244,6 @@ export default {
         console.log('ok')
     },
   components :{
-    ModifierEtudiants,
-    AfficherBac,
-    AfficherCni,
     DetailCommande,
     Menu
 }

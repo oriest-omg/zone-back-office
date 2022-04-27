@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Connexion from '../views/Connexion.vue'
-import ListeVoitures from '../views/ListeVoitures.vue'
+import ListeArticles from '../views/ListeArticles.vue'
 import ListeCommandes from '../views/CommandeView.vue'
 import ListeModeles from '../views/ListeModeles'
 import genPDF from '../views/pdf.vue'
@@ -13,9 +13,9 @@ const routes = [
     component: Connexion
   },
   {
-    path: '/ListeVoitures',
-    name: 'ListeVoitures',
-    component: ListeVoitures
+    path: '/ListeArticles',
+    name: 'ListeArticles',
+    component: ListeArticles
   },
   {
     path: '/ListeCommandes',

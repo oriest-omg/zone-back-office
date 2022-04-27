@@ -1,4 +1,4 @@
-<template>
+<template >
 <body class="hold-transition sidebar-mini layout-fixed">
       <!-- Google Font: Source Sans Pro -->
   <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> -->
@@ -31,11 +31,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>listes modeles</h1>
+            <h1>listes articles</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">liste modeles</li>
+              <li class="breadcrumb-item active">liste articles</li>
             </ol>
           </div>
         </div>
@@ -43,64 +43,22 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" >
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Liste des modeles</h3>
+                <h3 class="card-title">Liste des articles</h3>
                 <div class="float-right">
                       <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-ajouter">Ajouter</button>
                 </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>marque</th>
-                    <th>denomination</th>
-                    <th>action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr v-for ="(modele,index) in modeles" :key="index">
-                    <td>{{ modele.marque }}</td>
-                    <td>{{ modele.denomination}}</td>
-                    <!-- <td>{{ voiture.matricule}}</td> -->
-                    <!-- <td>
-                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bmodal-default" @click="Afficher(etudiant.id)"> 
-                      <img :src="'http://localhost:8000'+etudiant.cni" width="100" height="100" alt="">
-                      </button>   
-                    </td>
-                    <td>
-                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#amodal-default" @click="Afficher(etudiant.id)"> 
-                       <img :src="'http://localhost:8000'+etudiant.bacBenef" width="100" height="100" alt="">
-                      </button>   
-                    </td> -->
-                    <td>
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" @click="Modifier(etudiant.id)">
-                        Modifier
-                      </button>                    
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" @click="Modifier(etudiant.id)">
-                        Supprimer
-                      </button>
-                    </td>
-                      <!-- /.control-sidebar -->
-
-                  </tr>
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>marque</th>
-                    <th>denomination</th>
-                    <th>action</th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
+              <ProductTable 
+              :key="maj" 
+              v-on:up="up()"/>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -111,11 +69,12 @@
       </div>
       <!-- /.container-fluid -->
     </section>
+
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2021-2022 <a href="https://adminlte.io">AGITEL FORMATION</a>.</strong>
+    <strong>Copyright &copy; 2021-2022 <a href="#">Djelloh Foundation</a>.</strong>
     Tous les droits sont réservés.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0-rc
@@ -126,8 +85,8 @@
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
   </aside>
-
-    <AjouterModele/>
+        <AjouterProduct
+         v-on:upp="upp()"/>
 
 </div>
 <!-- ./wrapper -->
@@ -137,38 +96,30 @@
 </template>
 
 <script>
-import axios from 'axios';
-import AjouterModele from '../components/Modals/Modeles/AjouterModele.vue';
+import AjouterProduct from '../components/Modals/products/AddProduct.vue';
 import Menu from '../components/menu.vue';
+import ProductTable from '../components/Modals/products/ProductTable.vue';
 
 export default {
-    name : 'ListeModeles',
+    name : 'ListeVoitures',
         data() {
         return {
-                modeles : []
+                maj : 0,
         }
     },
        methods : {
-        async getModels(){
-        await axios
-        .get("http://localhost:8000/api/modeles")
-        .then(response=> {
-            console.log(response);
-            for (const modele of response.data){
-                this.modeles.push(modele)
-            }
-        console.log(this.modeles);
-              });
-          },
+         up(){
+           this.maj += 1;
+         },
+        upp(){
+           this.maj += 1;
+          console.log('upp');
+         },
         },
-
-    async mounted() {
-        await this.getModels();
-        console.log('ok')
-    },
   components :{
+    AjouterProduct,
     Menu,
-    AjouterModele
+    ProductTable
 }
 }
 </script>

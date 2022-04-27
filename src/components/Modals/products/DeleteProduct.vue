@@ -1,5 +1,5 @@
 <template>
-      <div class="modal fade" id="modal-delete">
+      <div class="modal fade" v-bind:id="'modal-delete'+idProduct">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -15,7 +15,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-            <button type="button" class="btn btn-success" @click="DeleteProduct()" >Supprimer</button>
+            <button type="button" class="btn btn-success" @click="DeleteProduct()" data-dismiss="modal" aria-label="Close">Supprimer</button>
         </div>
           </div>
           <!-- /.modal-content -->
@@ -33,7 +33,10 @@ export default {
     },
     // emits:['on-reload'],
     methods : {
-            DeleteProduct(){
+            up(){
+                this.$emit('up');
+            },
+             DeleteProduct(){
                 const options = {
                     url: 'http://localhost:3000/product',
                     method: 'DELETE',
@@ -51,7 +54,8 @@ export default {
                         text: "article supprimé avec succès",
                         type : "success"
                     })
-                    this.$emit("on-reload",true)
+                 this.up();
+
                 })                
                 .catch(error =>{
                     this.$notify({

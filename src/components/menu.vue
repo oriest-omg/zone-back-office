@@ -31,10 +31,10 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <router-link to="/ListeVoitures" class="nav-link" style="color:white">
+            <router-link to="/ListeArticles" class="nav-link" style="color:white">
               <p>
-                Liste des voitures
-                <span class="right badge badge-danger">{{nbEtudiantEnCours}}</span>
+                Liste des articles
+                <!-- <span class="right badge badge-danger">{{nbEtudiantEnCours}}</span> -->
               </p>
             </router-link>
           </li>
@@ -43,7 +43,7 @@
             <router-link to="/ListeCommandes" class="nav-link" style="color:white">
               <p>
                 Liste des commandes
-                <span class="right badge badge-danger">{{nbEtudiantEnCours}}</span>
+                <!-- <span class="right badge badge-danger">{{nbEtudiantEnCours}}</span> -->
               </p>
             </router-link>
           </li>

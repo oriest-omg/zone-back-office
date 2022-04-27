@@ -55,12 +55,12 @@
                     </tbody>
                 </table>
                 <div>
-                    <button class="btn btn-primary" @click="addRow"> Ajouter</button>
+                    <button class="btn btn-primary" @click="addRow" > Ajouter</button>
                 </div>
         </div>
         <div class="modal-footer">
             <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button> -->
-            <button type="button" class="btn btn-success" @click="AjouterProduct()" >Enregistrer</button>
+            <button type="button" class="btn btn-success" @click="AjouterProduct()" data-dismiss="modal" aria-label="Close">Enregistrer</button>
         </div>
           </div>
           <!-- /.modal-content -->
@@ -71,7 +71,6 @@
 
 <script>
 import  axios from 'axios'
-import moment from 'moment'
 import myItem from './my-item.vue'
 export default {
   components: { myItem },
@@ -100,13 +99,17 @@ export default {
                 }
             ],
             title:'',
-            category:'',
+            category:'chaussure',
             channels : [],
             image : ''
         }
     },
     // emits:['on-reload'],
     methods : {
+             up(){
+                this.$emit('upp');
+                console.log('upp');
+            },
             async AjouterProduct(){
                 await this.submitFile();
                 const options = {
@@ -131,8 +134,35 @@ export default {
                             text: "Article ajouté Ajouter",
                             type : "success"
                         })
+                        this.title = '';
+                        this.category = 'chaussure';
+                        this.channels = [];
+                        this.image = '';
+                        this.productTypes = [
+                            {
+                                available : true,
+                                stock : '',
+                                price :{
+                                    original :0,
+                                    discount : 0,
+                                    bulk_discount : 0,
+                                    discount_quantity : 0,
+                                    currency : 0
+                                },
+                                description : '',
+                                images :'',
+                                dimensions :{
+                                    width :'',
+                                    height :'',
+                                    length :'',
+                                    unit :''
+                                }
+                            }
+                        ];
+                        this.item.img =false;
+                        this.up();
                     }
-                    this.$emit("on-reload",true)
+                    // this.$emit("on-reload",true)
                 })
                 .catch(error =>{
                     this.$notify({
